@@ -1,0 +1,18 @@
+{
+  "name": "pruebas_con_node_js",
+  "version": "0.0.1",
+  "description": "",
+  "license": "ISC",
+  "author": "Andres Bravo",
+  "type": "commonjs",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "nodemon src/solicitudesv1.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
