@@ -34,6 +34,11 @@ const guardarUsuarios = (usuarios) => {
 //     console.log(usuario);
 // })()
 
+// Ruta GET para obtener todos los usuarios
+app.get('/usuarios', (req, res) => {
+    let usuarios = leerUsuarios(); // Leer usuarios actuales desde el archivo
+    res.json(usuarios); // Devolver la lista de usuarios
+});
 
 
 // Ruta para actualizar un usuario con PUT
