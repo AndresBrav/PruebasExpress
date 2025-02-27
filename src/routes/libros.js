@@ -12,6 +12,13 @@ router.get('/:nombre', (req, res) => {
     res.send(`El nombre del libro es  ${nombre}`);
 });
 
+router.get('/:nombres/:autor/:anioEdicion', (req, res) => {
+    console.log(req.params);
+    const { nombres, autor, anioEdicion } = req.params;
+    res.send(`El libro "${anioEdicion}" fue escrito por ${autor} y publicado en el año ${anioEdicion}.`);
+});
+
+
 // Ruta para agregar un nuevo libro
 router.post('/', (req, res) => {
     const { titulo, autor } = req.body;
