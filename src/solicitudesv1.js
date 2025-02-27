@@ -121,8 +121,6 @@ app.delete('/usuarios/:id', (req, res) => {
 //rutas de los autos 
 app.use('/autos',RutasAutos);
 
-
-
 // rutas de los libros ...........................
 app.use('/libros', RutasLibros);
 

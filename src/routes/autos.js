@@ -1,49 +1,51 @@
-import express from 'express'
-import fs from 'fs'
+import express from 'express';
+import fs from 'fs';
 
 const rutasAutos = express.Router();
 
 rutasAutos.get('/', (req, res) => {
-    res.send('Hola bienvenido a la pagina de autos')
-})
+    res.send('Hola bienvenido a la pagina de autos');
+});
 
-//verificarArchivo
+// Verificar si el archivo de autos existe
 const verificarArchivo = (req, res, next) => {
     const archivo = 'carros.json';
     if (!fs.existsSync(archivo)) {
-        return res.status(500).json(
-            { error: 'el archivo de usuarios no existe' }
-        );
+        return res.status(500).json({ error: 'El archivo de autos no existe' });
     }
-    next(); /* continuamos la ejecucion  */
-}
+    next(); // Continuamos con la ejecución
+};
 
-
-// Función para leer usuarios desde el archivo
+// Función para leer los autos desde el archivo
 const leerAutos = () => {
     const data = fs.readFileSync('carros.json', 'utf8');
-    //data trae todo el contenido de json
-    console.log(data);
+    // console.log(data);
     return JSON.parse(data);
 };
 
-// Función para escribir autos en el archivo
 const guardarAutos = (autos) => {
+    console.log(autos);
     fs.writeFileSync('carros.json', JSON.stringify(autos, null, 2));
 };
 
-// Middleware para verificar si el archivo 'usuarios.json' existe
 rutasAutos.use(verificarArchivo); // Esto se ejecuta antes de las rutas
 
+// Ruta GET para obtener los autos
 rutasAutos.get('/obtener', (req, res) => {
     let autos = leerAutos();
-
-    res.json(autos)
+    res.json(autos);
 });
 
-rutasAutos.post('añadir',(req,res) => {
-    
-})
+rutasAutos.post('/aniadir', (req, res) => {
+    let autos = leerAutos();
+    const nuevoAuto = req.body;
 
-export default rutasAutos;
+    // autos.push(nuevoAuto)
+    autos =[...autos,nuevoAuto]
 
+    // Guardar los cambios en el archivo
+    guardarAutos(autos);
+    res.send(nuevoAuto)
+});
+
+export default rutasAutos
