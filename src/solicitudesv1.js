@@ -1,8 +1,18 @@
-const express = require('express')
+// const express = require('express')
+import express from 'express'
+import RutasLibros from './routes/libros.js'
+
 const app = express();
 
 // Middleware para interpretar JSON en las peticiones
 app.use(express.json())
+
+
+// rutas de los libros ...........................
+app.use('/libros',RutasLibros);
+
+
+
 
 app.get('/', (req, res) => {
     res.send('welcome to my API');

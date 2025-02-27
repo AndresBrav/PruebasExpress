@@ -4,7 +4,7 @@
   "description": "",
   "license": "ISC",
   "author": "Andres Bravo",
-  "type": "commonjs",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon src/solicitudesv1.js"
