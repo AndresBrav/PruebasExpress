@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "nombreMarca": "Ferrari"
+    },
+    {
+        "id": 2,
+        "nombreMarca": "Porsche"
+    },
+    {
+        "id": 3,
+        "nombreMarca": "VW"
+    },
+    {
+        "id": 4,
+        "nombreMarca": "Peugeot"
+    },
+    {
+        "id": 5,
+        "nombreMarca": "Lamborgini"
+    }
+]

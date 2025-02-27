@@ -1,12 +1,24 @@
 // const express = require('express')
 import express from 'express'
 import RutasLibros from './routes/libros.js'
+import RutasAutos from './routes/autos.js'
+import RutasBasicas from './routes/comandosBasicos.js'
+
 import fs from 'fs'
 
 const app = express();
 
 // Middleware para interpretar JSON en las peticiones
 app.use(express.json())
+
+// Middleware para verificar si el archivo 'usuarios.json' existe
+const verificarArchivo = (req, res, next) => {
+    const archivo = 'usuarios.json';
+    if (!fs.existsSync(archivo)) {
+        return res.status(500).json({ error: 'El archivo de usuarios no existe' });
+    }
+    next(); // Si el archivo existe, continuamos con la siguiente función (la ruta DELETE)
+};
 
 // Array de ejemplo con usuarios
 // let usuarios = [
@@ -28,11 +40,8 @@ const guardarUsuarios = (usuarios) => {
     fs.writeFileSync('usuarios.json', JSON.stringify(usuarios, null, 2));
 };
 
-// (() => {
-//     let id = 1; // Aquí puedes definir el id o pasarlo dinámicamente
-//     let usuario = usuarios.find(i => i.id === id);
-//     console.log(usuario);
-// })()
+// Middleware para verificar si el archivo 'usuarios.json' existe
+app.use(verificarArchivo); // Esto se ejecuta antes de las rutas
 
 // Ruta GET para obtener todos los usuarios
 app.get('/usuarios', (req, res) => {
@@ -86,7 +95,31 @@ app.post('/usuarios', (req, res) => {
     res.status(201).json({ mensaje: 'Usuario creado', usuario: usuarioConId });
 });
 
+// Ruta DELETE para eliminar un usuario
+app.delete('/usuarios/:id', (req, res) => {
+    let usuarios = leerUsuarios(); // Leer usuarios actuales desde el archivo
+    const id = parseInt(req.params.id); // Obtener el ID del parámetro de la URL
 
+    // Buscar el índice del usuario a eliminar
+    const index = usuarios.findIndex(u => u.id === id);
+
+    // Si el usuario no se encuentra, respondemos con un error 404
+    if (index === -1) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Eliminar el usuario
+    usuarios.splice(index, 1);
+
+    // Guardar los cambios en el archivo
+    guardarUsuarios(usuarios);
+
+    // Responder con un mensaje de éxito
+    res.json({ mensaje: `Usuario con ID ${id} eliminado` });
+});
+
+//rutas de los autos 
+app.use('/autos',RutasAutos);
 
 
 
@@ -94,30 +127,8 @@ app.post('/usuarios', (req, res) => {
 app.use('/libros', RutasLibros);
 
 
-app.get('/', (req, res) => {
-    res.send('welcome to my API');
-})
-
-// Ruta GET con parámetro en la URL
-app.get('/saludar-usuario/:usuario', (req, res) => {
-    const { usuario } = req.params // Obtiene el parámetro de la URL
-    res.send(`¡Hola, ${usuario}!`)
-})
-
-app.get('/equipoFutbol/:equipo', (req, res) => {
-    const { equipo } = req.params
-    res.send(`Tu equipo favorito es: ${equipo}`)
-})
-
-
-// Ruta POST: Recibe datos del cuerpo de la petición
-app.post('/mensaje', (req, res) => {
-    const { texto } = req.body // Extrae el campo "texto" del cuerpo
-    if (!texto) {
-        return res.status(400).json({ error: 'El campo "texto" es obligatorio' })
-    }
-    res.json({ mensaje: `Has enviado: ${texto}` })
-})
+//comandos basicos
+app.use('/basic',RutasBasicas);
 
 app.listen(3000, () => {
     console.log("servidor corriendo en localhost");
